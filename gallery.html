@@ -3,12 +3,97 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Famous Pokémon</title>
+  <title>Pokémon Type Calculator</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #333;
+      padding: 10px;
+      text-align: center;
+    }
+
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    nav ul li {
+      display: inline;
+      margin: 0 15px;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    nav ul li a:hover {
+      color: #ffcc00;
+    }
+
+    section {
+      padding: 20px;
+    }
+
+    h1, h2 {
+      color: #ffcc00;
+    }
+
+    .type-calculator {
+      background-color: #222;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    .type-calculator label {
+      color: white;
+      margin-right: 10px;
+    }
+
+    .type-calculator select {
+      padding: 5px;
+      margin: 5px;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .type-calculator button {
+      padding: 10px;
+      background-color: #ffcc00;
+      color: black;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .type-calculator button:hover {
+      background-color: #ff9933;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #333;
+      border-radius: 10px;
+    }
+
+  </style>
 </head>
 <body>
 
   <header>
-    <h1>Pokémon</h1>
+    <h1>Pokémon Type Calculator</h1>
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
@@ -18,15 +103,123 @@
     </nav>
   </header>
 
-  <section id="gallery">
-    <h2>Famous Pokémon</h2>
-    <p>Several Pokémon have become iconic over the years, thanks to their unique designs, abilities, and roles in the Pokémon games, TV series, and movies. Among the most famous is Pikachu, the franchise's mascot and the face of Pokémon worldwide. Pikachu, an Electric-type Pokémon, is known for its cheerful personality and its iconic yellow fur with pointy ears and a lightning bolt-shaped tail. As the loyal companion of Ash Ketchum, the protagonist of the animated TV series, Pikachu has become synonymous with the brand.</p>
-    <p>Another well-known Pokémon is Charizard, a Fire/Flying-type Pokémon that evolves from Charmander. Charizard is famous for its dragon-like appearance, powerful fire-based attacks, and its role as one of the most popular Pokémon in the games. Bulbasaur, Squirtle, and Charmander are also among the original starter Pokémon from the first generation, and they continue to be fan favorites due to their distinct evolutions and personalities.</p>
-    <p>Eevee is another beloved Pokémon, known for its ability to evolve into several different forms, known as "Eeveelutions." These include Flareon (Fire-type), Vaporeon (Water-type), Jolteon (Electric-type), and others, making Eevee one of the most versatile and intriguing Pokémon in the franchise.</p>
-    <p>Additionally, Mewtwo, a powerful Psychic-type Pokémon created through genetic manipulation, is another iconic figure, known for its deep backstory and central role in the first Pokémon movie. Lucario, a Fighting/Steel-type Pokémon, gained fame for its strong connection with aura powers and its appearance in both the games and the Pokémon anime.</p>
-    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png" alt="Bulbasaur">
-    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png" alt="Charmander">
+  <section id="type-calculator">
+    <h2>Calculate Type Effectiveness</h2>
+
+    <div class="type-calculator">
+      <label for="attacking-type">Select Attacking Type:</label>
+      <select id="attacking-type">
+        <option value="fire">Fire</option>
+        <option value="water">Water</option>
+        <option value="grass">Grass</option>
+        <option value="electric">Electric</option>
+        <option value="ground">Ground</option>
+        <option value="fighting">Fighting</option>
+        <option value="psychic">Psychic</option>
+        <option value="ice">Ice</option>
+        <option value="bug">Bug</option>
+        <option value="rock">Rock</option>
+        <option value="ghost">Ghost</option>
+      </select>
+
+      <label for="defending-type">Select Defending Type:</label>
+      <select id="defending-type">
+        <option value="fire">Fire</option>
+        <option value="water">Water</option>
+        <option value="grass">Grass</option>
+        <option value="electric">Electric</option>
+        <option value="ground">Ground</option>
+        <option value="fighting">Fighting</option>
+        <option value="psychic">Psychic</option>
+        <option value="ice">Ice</option>
+        <option value="bug">Bug</option>
+        <option value="rock">Rock</option>
+        <option value="ghost">Ghost</option>
+      </select>
+
+      <button onclick="calculateEffectiveness()">Calculate</button>
+    </div>
+
+    <div class="result" id="result"></div>
   </section>
+
+  <script>
+    function calculateEffectiveness() {
+      const attackingType = document.getElementById("attacking-type").value;
+      const defendingType = document.getElementById("defending-type").value;
+      let effectiveness = "";
+
+      const typeChart = {
+        "fire": {
+          "grass": "Fire is super effective against Grass!",
+          "water": "Fire is not very effective against Water.",
+          "fire": "Fire has no effect on Fire.",
+          "rock": "Fire is not very effective against Rock.",
+          "bug": "Fire is super effective against Bug!"
+        },
+        "water": {
+          "fire": "Water is super effective against Fire!",
+          "electric": "Water is not very effective against Electric.",
+          "water": "Water has no effect on Water.",
+          "ground": "Water is super effective against Ground!"
+        },
+        "grass": {
+          "water": "Grass is super effective against Water!",
+          "fire": "Grass is not very effective against Fire.",
+          "electric": "Grass is not very effective against Electric.",
+          "flying": "Grass is not very effective against Flying."
+        },
+        "electric": {
+          "water": "Electric is super effective against Water!",
+          "ground": "Electric has no effect on Ground.",
+          "electric": "Electric has no effect on Electric."
+        },
+        "ground": {
+          "fire": "Ground is super effective against Fire!",
+          "water": "Ground is super effective against Water!",
+          "electric": "Ground is immune to Electric.",
+          "grass": "Ground is weak to Grass."
+        },
+        "fighting": {
+          "normal": "Fighting is super effective against Normal!",
+          "rock": "Fighting is super effective against Rock!",
+          "ghost": "Fighting has no effect on Ghost."
+        },
+        "psychic": {
+          "fighting": "Psychic is super effective against Fighting!",
+          "ghost": "Psychic is super effective against Ghost!",
+          "bug": "Psychic is weak against Bug."
+        },
+        "ice": {
+          "dragon": "Ice is super effective against Dragon!",
+          "fire": "Ice is not very effective against Fire.",
+          "fighting": "Ice is weak against Fighting."
+        },
+        "bug": {
+          "psychic": "Bug is super effective against Psychic!",
+          "fighting": "Bug is weak to Fighting."
+        },
+        "rock": {
+          "fire": "Rock is super effective against Fire!",
+          "water": "Rock is weak to Water.",
+          "grass": "Rock is weak to Grass."
+        },
+        "ghost": {
+          "normal": "Ghost has no effect on Normal.",
+          "psychic": "Ghost is super effective against Psychic!"
+        }
+      };
+
+      if (typeChart[attackingType] && typeChart[attackingType][defendingType]) {
+        effectiveness = typeChart[attackingType][defendingType];
+      } else {
+        effectiveness = "No special effect for this combination.";
+      }
+
+      document.getElementById("result").innerHTML = effectiveness;
+    }
+  </script>
 
 </body>
 </html>
+
